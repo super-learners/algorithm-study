@@ -16,7 +16,7 @@ class Solution:
                 "min": p[2] * 10 + p[3]
             }
 
-            if self.isLater(time, latest):
+            if self.is_later(time, latest):
                 latest = time
         if latest["hour"] is None:
             return ""
@@ -27,7 +27,7 @@ class Solution:
             return "0" + str(num)
         return str(num)
 
-    def isLater(self, time1, time2):
+    def is_later(self, time1, time2):
         if time2["hour"] is None:
             return True
         elif time1["hour"] > time2["hour"]:
