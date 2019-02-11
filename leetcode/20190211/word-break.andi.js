@@ -13,7 +13,8 @@ const wordBreak = (s, wordDict) => {
     if (!(c in wordDictCharacterMap))
       return false;
   }
-  return solveBacktrack(s, wordDict);
+  const cheatsheet = {};
+  return solveBacktrack(s, wordDict, cheatsheet);
 };
 
 /**
@@ -21,15 +22,15 @@ const wordBreak = (s, wordDict) => {
  * @param {string[]} wordDict
  * @return {boolean}
  */
-const solveBacktrack = (s, wordDict) => {
+const solveBacktrack = (s, wordDict, cheatsheet) => {
   if (s.length == 0) return true;
+  if (s in cheatsheet) return cheatsheet[s];
   let success = false;
   for (const word of wordDict) {
     if (s.startsWith(word)) {
-      success = success || wordBreak(s.substring(word.length), wordDict);
+      success = success || solveBacktrack(s.substring(word.length), wordDict, cheatsheet);
     }
   }
+  cheatsheet[s] = success;
   return success;
 }
-
-
