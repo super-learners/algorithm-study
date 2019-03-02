@@ -12,28 +12,39 @@ def main():
     write("Case #{}: {}".format(str(idx_testcase), " ".join(plan)))
 
 def solve(senators):
-  num_senators = sum(senators)
   plan = []
-  sorted_senators = sorted(enumerate(senators), key=lambda e: e[1], reverse=True)
-  while num_senators > 0:
-    plan.append(chr(ord("A") + sorted_senators[0][0]))
-    sorted_senators[0] = (sorted_senators[0][0], sorted_senators[0][1] - 1)
-    num_senators -= 1
-    if sorted_senators[0][1] == 0:
-      sorted_senators.pop(0)
+  party_n_senators = [(chr(ord("A") + x[0]), x[1]) for x in enumerate(senators)]
+  party_n_senators = sorted(party_n_senators, key=lambda e: e[1], reverse=True)
+  def party_of(pns):
+    return pns[0]
+  def num_senator_of(pns):
+    return pns[1]
+  def dec_num_senator_of(pns_list, idx):
+    pns_list[idx] = (pns_list[idx][0], pns_list[idx][1] - 1)
 
-    if len(sorted_senators) == 0:
+  while True:
+    plan.append(party_of(party_n_senators[0]))
+    dec_num_senator_of(party_n_senators, 0)
+    if num_senator_of(party_n_senators[0]) == 0:
+      party_n_senators.pop(0)
+
+    if len(party_n_senators) == 0:
       return plan
-    largest_num_senators_party_idx = 0
-    if len(sorted_senators) > 1 and sorted_senators[1][1] > sorted_senators[0][1]:
-      largest_num_senators_party_idx = 1
-    if sorted_senators[largest_num_senators_party_idx][1] * 2 > sum([x[1] for x in sorted_senators]):
-      plan.append(plan.pop() + chr(ord("A") + sorted_senators[largest_num_senators_party_idx][0]))
-      sorted_senators[largest_num_senators_party_idx] = (sorted_senators[largest_num_senators_party_idx][0], sorted_senators[largest_num_senators_party_idx][1] - 1)
-      num_senators -= 1
-      if sorted_senators[largest_num_senators_party_idx][1] == 0:
-        sorted_senators.pop(largest_num_senators_party_idx)
-    sorted_senators = sorted(enumerate(senators), key=lambda e: e[1], reverse=True)
+
+    party_n_senators = sorted(party_n_senators, key=lambda e: e[1], reverse=True)
+
+    if num_senator_of(party_n_senators[0]) * 2 <= sum([num_senator_of(x) for x in party_n_senators]):
+      continue
+
+    plan.append(plan.pop() + party_of(party_n_senators[0]))
+    dec_num_senator_of(party_n_senators, 0)
+    if num_senator_of(party_n_senators[0]) == 0:
+      party_n_senators.pop(0)
+
+    if len(party_n_senators) == 0:
+      return plan
+
+    party_n_senators = sorted(party_n_senators, key=lambda e: e[1], reverse=True)
 
   return plan
 
