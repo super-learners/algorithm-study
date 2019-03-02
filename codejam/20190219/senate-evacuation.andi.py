@@ -27,14 +27,13 @@ def solve(senators):
     largest_num_senators_party_idx = 0
     if len(sorted_senators) > 1 and sorted_senators[1][1] > sorted_senators[0][1]:
       largest_num_senators_party_idx = 1
-    if sorted_senators[largest_num_senators_party_idx][1] * 2 <= sum([x[1] for x in sorted_senators]):
-      continue
-
-    plan.append(plan.pop() + chr(ord("A") + sorted_senators[largest_num_senators_party_idx][0]))
-    sorted_senators[largest_num_senators_party_idx] = (sorted_senators[largest_num_senators_party_idx][0], sorted_senators[largest_num_senators_party_idx][1] - 1)
-    num_senators -= 1
-    if sorted_senators[largest_num_senators_party_idx][1] == 0:
-      sorted_senators.pop(largest_num_senators_party_idx)
+    if sorted_senators[largest_num_senators_party_idx][1] * 2 > sum([x[1] for x in sorted_senators]):
+      plan.append(plan.pop() + chr(ord("A") + sorted_senators[largest_num_senators_party_idx][0]))
+      sorted_senators[largest_num_senators_party_idx] = (sorted_senators[largest_num_senators_party_idx][0], sorted_senators[largest_num_senators_party_idx][1] - 1)
+      num_senators -= 1
+      if sorted_senators[largest_num_senators_party_idx][1] == 0:
+        sorted_senators.pop(largest_num_senators_party_idx)
+    sorted_senators = sorted(enumerate(senators), key=lambda e: e[1], reverse=True)
 
   return plan
 
